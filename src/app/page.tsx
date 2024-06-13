@@ -1,12 +1,13 @@
 import React from 'react'
 import QuizApp from '../component/quiz'
+import { NextResponse } from 'next/server'
 
 
 async function getData() {
-  const res = await fetch('https://opentdb.com/api.php?amount=20', { cache: 'no-store' })
+  const res = await fetch('https://opentdb.com/api.php?amount=20', { next: { revalidate: 600 } })
 
   if (!res.ok) {
-    throw new Error('Failed to fetch data')
+    return NextResponse.json('error')
   }
 
   return res.json()

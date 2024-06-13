@@ -68,54 +68,70 @@ const QuizApp: React.FC<Props> = ({ quizData }) => {
     };
 
     return (
-        <div className=" mt-10 p-6 bg-white rounded-lg shadow-xl">
-            {showResult ? (
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-4">Quiz Result</h2>
-                    <p className="text-lg">Your Score: {score} / {quizData.length}</p>
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-                        onClick={resetQuiz}
-                    >
-                        Restart Quiz
-                    </button>
+        <>
+            {quizData?.length > 0 ? (
+                <div style={{ marginTop: '10px', padding: '10px', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
+                    {showResult ? (
+                        <div style={{ textAlign: 'center' }}>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Quiz Result</h2>
+                            <p style={{ fontSize: '1.25rem' }}>Your Score: {score} / {quizData.length}</p>
+                            <button
+                                style={{ backgroundColor: '#1a9cff', color: 'white', fontWeight: 'bold', padding: '0.5rem 1rem', borderRadius: '4px', marginTop: '1rem', cursor: 'pointer' }}
+                                onClick={resetQuiz}
+                            >
+                                Restart Quiz
+                            </button>
+                        </div>
+                    ) : (
+                        <div style={{ textAlign: 'center' }}>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Question {currentQuestion + 1}</h2>
+                            <p style={{ fontSize: '1.25rem', marginBottom: '1rem' }} dangerouslySetInnerHTML={{ __html: quizData[currentQuestion].question }}></p>
+                            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                {[...quizData[currentQuestion].incorrect_answers, quizData[currentQuestion].correct_answer].sort().map((option, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleOptionSelect(option)}
+                                        style={{
+                                            padding: '0.5rem 1rem',
+                                            borderRadius: '4px',
+                                            marginRight: '8px',
+                                            marginBottom: '8px',
+                                            backgroundColor: selectedOption === option ? '#1a9cff' : '#f0f0f0',
+                                            color: selectedOption === option ? 'white' : '#333',
+                                            cursor: 'pointer',
+                                            transition: 'background-color 0.3s ease',
+                                            border: 'none',
+                                        }}
+                                    >
+                                        {option}
+                                    </button>
+                                ))}
+                            </div>
+                            <div style={{ marginTop: '1rem' }}>
+                                <button
+                                    style={{ backgroundColor: '#ff6666', color: 'white', fontWeight: 'bold', padding: '0.5rem 1rem', borderRadius: '4px', marginRight: '8px', cursor: 'pointer' }}
+                                    onClick={handleNextQuestion}
+                                    disabled={!selectedOption}
+                                >
+                                    {currentQuestion === quizData.length - 1 ? 'Finish' : 'Next Question'}
+                                </button>
+                                <button
+                                    style={{ backgroundColor: '#666666', color: 'white', fontWeight: 'bold', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}
+                                    onClick={handleSkipQuestion}
+                                >
+                                    Skip
+                                </button>
+                            </div>
+                            <div style={{ marginTop: '1rem' }}>
+                                <p>Time Left: {Math.floor(timeLeft / 60)} minutes {timeLeft % 60} seconds</p>
+                            </div>
+                        </div>
+                    )}
                 </div>
             ) : (
-                <div className="text-center">
-                    <h2 className="text-2xl font-bold mb-4">Question {currentQuestion + 1}</h2>
-                    <p className="text-lg mb-4" dangerouslySetInnerHTML={{ __html: quizData[currentQuestion].question }}></p>
-                    <div className="md:flex justify-center">
-                        {[...quizData[currentQuestion].incorrect_answers, quizData[currentQuestion].correct_answer].sort().map((option, index) => (
-                            <button
-                                key={index}
-                                onClick={() => handleOptionSelect(option)}
-                                className={`py-2 px-4 rounded lg:mr-4 m-1 ${selectedOption === option ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'} hover:bg-blue-700 hover:text-white`}
-                            >
-                                {option}
-                            </button>
-                        ))}
-                    </div>
-                    <div className="mt-4">
-                        <button
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-4"
-                            onClick={handleNextQuestion}
-                            disabled={!selectedOption}
-                        >
-                            {currentQuestion === quizData.length - 1 ? 'Finish' : 'Next Question'}
-                        </button>
-                        <button
-                            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-                            onClick={handleSkipQuestion}
-                        >
-                            Skip
-                        </button>
-                    </div>
-                    <div className="mt-4">
-                        <p>Time Left: {Math.floor(timeLeft / 60)} minutes {timeLeft % 60} seconds</p>
-                    </div>
-                </div>
+                <p>No Data</p>
             )}
-        </div>
+        </>
     );
 }
 
