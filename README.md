@@ -6,17 +6,11 @@ To begin, run the development server using one of the following commands:
 bash
 Copy code
 npm run dev
-
-# or
-
+............
 yarn dev
-
-# or
-
+...........
 pnpm dev
-
-# or
-
+..........
 bun dev
 
 This will launch the development server, allowing you to preview and test your application locally.
